@@ -6,29 +6,48 @@ services:
       context: ./docker/services/frontend
     tty: true
     volumes:
-      - ./frontend:/var/app
+      - ./frontend:/var/frontend
+    working_dir: /var/frontend
+    entrypoint:
+      - sh
+    command:
+      - -c
+      - |
+        [ -f ~/.frontend-exec-once ] || {
+          cd /var/frontend npm install && touch ~/.frontend-exec-once
+        }
+        cd /var/frontend && npm run dev
     ports:
       - "3000:3000"
-  # api:
-  #   container_name: api
-  #   build:
-  #     context: ./docker/services/backend
-  #   tty: true
-  #   ports:
-  #     - "3001:3001"
-  #   volumes:
-  #     - type: bind
-  #       source: .
-  #       target: /api
-  # mysql:
-  #   image: mysql/mysql-server:5.7
-  #   command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
-  #   ports:
-  #     - "3307:3307"
-  #   environment:
-  #     MYSQL_ROOT_PASSWORD: password
-  #     MYSQL_DATABASE: develop
-  #     MYSQL_USER: user
-  #     MYSQL_PASSWORD: password
-  #   volumes:
-  #     - /var/lib/mysql
+  backend:
+    container_name: backend
+    build:
+      context: ./docker/services/backend
+    tty: true
+    volumes:
+      - ./backend:/var/backend
+    working_dir: /var/backend
+    entrypoint:
+      - sh
+    command:
+      - -c
+      - |
+        [ -f ~/.backend-exec-once ] || {
+          cd /var/backend npm install && touch ~/.backend-exec-once
+        }
+        cd /var/backend && npm run start:dev
+    ports:
+      - "3001:3001"
+  mysql:
+    container_name: mysql
+    image: mysql/mysql-server:5.7
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    ports:
+      - "3307:3307"
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: develop
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    volumes:
+      - /var/lib/mysql

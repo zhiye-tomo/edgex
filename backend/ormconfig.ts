@@ -6,7 +6,7 @@ const options: MysqlConnectionOptions = {
   port: 3307,
   username: 'user',
   password: 'password',
-  database: 'mysql', //dockerのdb名
+  database: 'mysql',
   entities: ['dist/src/**/*.entity.js'],
   migrations: ['dist/migration/**/*.migration.js'],
   cli: {
