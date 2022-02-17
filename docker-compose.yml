@@ -3,20 +3,11 @@ services:
   frontend:
     container_name: frontend
     build:
-      context: ./docker/services/frontend
-    tty: true
+      context: .
+      dockerfile: docker/services/frontend/Dockerfile
     volumes:
       - ./frontend:/var/frontend
     working_dir: /var/frontend
-    entrypoint:
-      - sh
-    command:
-      - -c
-      - |
-        [ -f ~/.frontend-exec-once ] || {
-          cd /var/frontend npm install && touch ~/.frontend-exec-once
-        }
-        cd /var/frontend && npm run dev
     ports:
       - "3000:3000"
   backend:
@@ -26,20 +17,11 @@ services:
       - mysql
     container_name: backend
     build:
-      context: ./docker/services/backend
-    tty: true
+      context: .
+      dockerfile: docker/services/backend/Dockerfile
     volumes:
       - ./backend:/var/backend
     working_dir: /var/backend
-    entrypoint:
-      - sh
-    command:
-      - -c
-      - |
-        [ -f ~/.backend-exec-once ] || {
-          cd /var/backend npm install && touch ~/.backend-exec-once
-        }
-        cd /var/backend && npm run start:dev
     ports:
       - "3001:3001"
   mysql:
