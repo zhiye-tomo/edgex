@@ -12,7 +12,7 @@ services:
       - "3000:3000"
   backend:
     networks:
-      - network
+      - edgex
     depends_on:
       - mysql
     container_name: backend
@@ -27,7 +27,7 @@ services:
   mysql:
     env_file: ./docker/environments/mysql.env
     networks:
-      - network
+      - edgex
     container_name: mysql
     image: mysql/mysql-server:5.7
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
@@ -36,4 +36,4 @@ services:
     volumes:
       - /var/lib/mysql
 networks:
-  network:
+  edgex:
