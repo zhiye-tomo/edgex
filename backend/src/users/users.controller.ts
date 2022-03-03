@@ -1,30 +1,48 @@
-import { Body, Controller, Put, HttpException } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Put,
+  HttpException,
+  Res,
+  HttpStatus,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { RegisterNewUserDto } from './dto/store-new-user.dto';
-import { CannotAttachTreeChildrenEntityError } from 'typeorm';
-import { combineLatestInit } from 'rxjs/internal/observable/combineLatest';
+import { Response } from 'express';
 
 @Controller('users')
 export class UsersController {
   constructor(private uesrsService: UsersService) {}
+
   @Put()
-  async registerNewUser(@Body() body: RegisterNewUserDto) {
+  async registerNewUser(
+    @Res() res: Response,
+    @Body() body: RegisterNewUserDto,
+  ) {
     try {
       const users = await this.uesrsService.find(body.email);
       if (users.length) {
-        return {
+        res.status(HttpStatus.OK).json({
           error: {
             code: 'email_already_exists',
             message: 'Email already exists',
           },
-        };
+        });
+        return;
       }
+      const user = await this.uesrsService.create(body);
+      const jwt = this.uesrsService.generateJWT(user);
 
-      return await this.uesrsService.create(body);
+      res.status(HttpStatus.CREATED).json({ success: true, jwt });
     } catch (error) {
       console.log(error);
 
-      return HttpException;
+      res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+        error: {
+          code: 'internal_server_error',
+          message: 'Internal server error',
+        },
+      });
     }
   }
 }

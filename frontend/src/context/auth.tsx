@@ -1,5 +1,6 @@
 import { createContext, useReducer, useContext, useEffect } from "react";
 import { User } from "../types";
+import axios from "axios";
 
 interface State {
   authenticated: boolean;
@@ -7,9 +8,13 @@ interface State {
   loading: boolean;
 }
 
-interface Action {
+export interface Action {
   type: string;
-  payload: any;
+  payload: {
+    email: string;
+    firstName: string;
+    lastName: string;
+  };
 }
 
 const StateContext = createContext<State>({
@@ -18,7 +23,7 @@ const StateContext = createContext<State>({
   loading: true,
 });
 
-const DispatchContext = createContext(null);
+const DispatchContext = createContext((() => true) as React.Dispatch<Action>);
 
 const reducer = (state: State, { type, payload }: Action) => {
   switch (type) {
@@ -37,18 +42,24 @@ const reducer = (state: State, { type, payload }: Action) => {
 };
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [state, defaultDispatch] = useReducer(reducer, {
+  const [state, dispatch] = useReducer(reducer, {
     user: null,
     authenticated: false,
     loading: true,
   });
 
-  const dispatch = (type: string, payload?: User) =>
-    defaultDispatch({ type, payload });
+  useEffect(() => {
+    async function registerNewUser() {
+      axios.put(
+        `${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_API_VERSION}/users`,
+        state.user
+      );
+    }
+    registerNewUser();
+  }, [state.user]);
 
   return (
-    // value={dispatch}でvalueの下に赤いなみなみ線が出ます
-    <DispatchContext.Provider value={dispatch}> 
+    <DispatchContext.Provider value={dispatch}>
       <StateContext.Provider value={state}>{children}</StateContext.Provider>
     </DispatchContext.Provider>
   );

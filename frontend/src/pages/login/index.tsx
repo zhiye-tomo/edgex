@@ -1,42 +1,51 @@
-import { FunctionComponent, useState, useEffect } from "react";
+import { FunctionComponent, useState } from "react";
 import {
   GoogleLogin,
   GoogleLoginResponse,
   GoogleLoginResponseOffline,
 } from "react-google-login";
-import { useRouter } from "next/router";
-import { useAuthDispatch } from "../../context/auth";
+import { useAuthDispatch, useDispatchState } from "../../context/auth";
 
 const GoogleSignInComponent: FunctionComponent = () => {
   const [loginFailed, setLoginFailed] = useState<boolean>();
-  const [email, setEmail] = useState<string>("");
-  const [firstName, setFirstName] = useState<string>("");
-  const [lastName, setLastName] = useState<string>("");
-  const dispatch = useAuthDispatch();
-  const router = useRouter();
+  const { authenticated, loading, user } = useAuthDispatch();
+  const dispatch = useDispatchState();
 
-  const onLoginSuccess = (
+  const onLoginSuccess = async (
     res: GoogleLoginResponseOffline | GoogleLoginResponse
   ) => {
     if ("profileObj" in res) {
-      setEmail(res.profileObj.email);
-      setFirstName(res.profileObj.givenName);
-      setLastName(res.profileObj.familyName);
-      dispatch("LOGIN", { email, firstName, lastName };
+      const profileObj = res.profileObj;
+
+      dispatch({
+        type: "LOGIN",
+        payload: {
+          email: profileObj.email,
+          firstName: profileObj.givenName,
+          lastName: profileObj.familyName,
+        },
+      });
+
+      console.log("user", user);
     }
-
-    console.log(email);
-    console.log(firstName);
-    console.log(lastName);
-
-    // router.replace("/redirect_page_url");
   };
 
-  useEffect(() => {
-    console.log(email);
-    console.log(firstName);
-    console.log(lastName);
-  }, [email, firstName, lastName]);
+  const login = async () => {
+    dispatch({
+      type: "LOGIN",
+      payload: {
+        email: "tomo@test.com",
+        firstName: "firstName",
+        lastName: "lastName",
+      },
+    });
+  };
+
+  const logCat = () => {
+    console.log(
+      `${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_API_VERSION}/users`
+    );
+  };
 
   return (
     <div>
@@ -53,6 +62,8 @@ const GoogleSignInComponent: FunctionComponent = () => {
         cookiePolicy={"single_host_origin"}
         responseType="code,token"
       />
+      <button onClick={login}>Login</button>
+      <button onClick={logCat}>LogCat</button>
     </div>
   );
 };
