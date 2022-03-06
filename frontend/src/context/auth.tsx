@@ -3,17 +3,17 @@ import { User } from "../types";
 import axios from "axios";
 
 interface State {
-  authenticated: boolean;
+  authenticated?: boolean;
   user: User | undefined | null;
   loading: boolean;
+  jwt?: string;
 }
 
 export interface Action {
   type: string;
   payload: {
-    email: string;
-    firstName: string;
-    lastName: string;
+    user?: User;
+    jwt?: string;
   };
 }
 
@@ -21,19 +21,29 @@ const StateContext = createContext<State>({
   authenticated: false,
   user: undefined,
   loading: true,
+  jwt: "",
 });
 
 const DispatchContext = createContext((() => true) as React.Dispatch<Action>);
 
-const reducer = (state: State, { type, payload }: Action) => {
+const reducer: React.Reducer<State, Action> = (
+  state: State,
+  { type, payload }: Action
+) => {
   switch (type) {
+    case "OAUTH":
+      console.log(payload);
+      return {
+        user: payload.user,
+        loading: true,
+      };
     case "LOGIN":
+      console.log(payload);
       return {
         ...state,
+        jwt: payload.jwt,
         authenticated: true,
-        user: payload,
       };
-
     case "LOGOUT":
       return { ...state, authenticated: false, user: null };
     default:
@@ -46,20 +56,28 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     user: null,
     authenticated: false,
     loading: true,
+    jwt: "",
   });
 
   useEffect(() => {
     async function registerNewUser() {
-      axios.put(
+      const res = await axios.put(
         `${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_API_VERSION}/users`,
         state.user
       );
+      dispatch({
+        type: "LOGIN",
+        payload: { jwt: res.data.jwt },
+      });
     }
     registerNewUser();
-  }, [state.user]);
+  }, [state.authenticated]);
 
   return (
     <DispatchContext.Provider value={dispatch}>
+      {state.user?.email}
+      {`jwt: ${state?.jwt}`}
+      {`authenticated: ${state?.authenticated}`}
       <StateContext.Provider value={state}>{children}</StateContext.Provider>
     </DispatchContext.Provider>
   );

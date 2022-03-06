@@ -1,9 +1,10 @@
-import { Injectable, Body } from '@nestjs/common';
+import { Injectable, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { RegisterNewUserDto } from './dto/store-new-user.dto';
 import { User } from './user.entity';
+import { Response } from 'express';
 
 @Injectable()
 export class UsersService {
@@ -25,9 +26,14 @@ export class UsersService {
   find(email: string) {
     return this.repo.find({ email });
   }
-  generateJWT(user: User) {
-    console.log(user);
 
+  async returnJWT(body: RegisterNewUserDto) {
+    const user = await this.create(body);
+    const jwt = this.generateJWT(user);
+    return jwt;
+  }
+
+  generateJWT(user: User) {
     const token = this.jwtService.sign({ ...user });
     return token;
   }

@@ -5,11 +5,13 @@ import {
   GoogleLoginResponseOffline,
 } from "react-google-login";
 import { useAuthDispatch, useDispatchState } from "../../context/auth";
+import { useRouter } from "next/router";
 
 const GoogleSignInComponent: FunctionComponent = () => {
   const [loginFailed, setLoginFailed] = useState<boolean>();
   const { authenticated, loading, user } = useAuthDispatch();
   const dispatch = useDispatchState();
+  const router = useRouter();
 
   const onLoginSuccess = async (
     res: GoogleLoginResponseOffline | GoogleLoginResponse
@@ -20,25 +22,29 @@ const GoogleSignInComponent: FunctionComponent = () => {
       dispatch({
         type: "LOGIN",
         payload: {
-          email: profileObj.email,
-          firstName: profileObj.givenName,
-          lastName: profileObj.familyName,
+          user: {
+            email: profileObj.email,
+            firstName: profileObj.givenName,
+            lastName: profileObj.familyName,
+          },
         },
       });
-
-      console.log("user", user);
+      router.push("/");
     }
   };
 
   const login = async () => {
     dispatch({
-      type: "LOGIN",
+      type: "OAUTH",
       payload: {
-        email: "tomo@test.com",
-        firstName: "firstName",
-        lastName: "lastName",
+        user: {
+          email: "kaka@test.com",
+          firstName: "firstName",
+          lastName: "lastName",
+        },
       },
     });
+    router.push("/");
   };
 
   const logCat = () => {

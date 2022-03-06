@@ -4,6 +4,15 @@ const nextConfig = {
   compilerOptions: {
     baseUrl: "src",
   },
+  async redirects() {
+    return [
+      {
+        source: "/",
+        destination: "/",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;
