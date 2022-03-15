@@ -1,10 +1,10 @@
+import { Article } from 'src/articles/article.entity';
 import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
   AfterInsert,
-  // AfterUpdate,
-  // AfterRemove,
+  ManyToMany,
 } from 'typeorm';
 
 @Entity('users')
@@ -20,16 +20,11 @@ export class User {
   @Column()
   lastName: string;
 
+  @ManyToMany((type) => Article, (article) => article.users)
+  articles: User[];
+
   @AfterInsert()
   logInsert() {
     console.log('Inserted User with id: ', this.id);
   }
-  // @AfterUpdate()
-  // logUpdate() {
-  //   console.log('Updated User with id: ', this.id);
-  // }
-  // @AfterRemove()
-  // logRemove() {
-  //   console.log('Removed User with id: ', this.id);
-  // }
 }

@@ -1,12 +1,14 @@
-import { Body, Controller, Put, Res, HttpStatus } from '@nestjs/common';
+import { Body, Controller, Get, Put, Res, HttpStatus } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { RegisterNewUserDto } from './dto/store-new-user.dto';
 import { Response } from 'express';
+import { Public } from 'src/decorators/skip_auth.decorator';
 
 @Controller('users')
 export class UsersController {
   constructor(private uesrsService: UsersService) {}
 
+  @Public()
   @Put()
   async registerOrLogin(
     @Res() res: Response,
@@ -15,7 +17,8 @@ export class UsersController {
     try {
       const users = await this.uesrsService.find(body.email);
       if (users.length) {
-        const jwt = await this.uesrsService.returnJWT(body);
+        const user = users[0];
+        const jwt = await this.uesrsService.generateJWT(user);
         res.status(HttpStatus.OK).json({
           error: {
             code: 'email_already_exists',
@@ -25,11 +28,10 @@ export class UsersController {
         });
         return;
       }
-      const jwt = await this.uesrsService.returnJWT(body);
+
+      const jwt = await this.uesrsService.returnJwtForNewUser(body);
       res.status(HttpStatus.CREATED).json({ success: true, jwt });
     } catch (error) {
-      console.log(error);
-
       res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
         error: {
           code: 'internal_server_error',

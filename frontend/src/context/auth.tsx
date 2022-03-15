@@ -65,6 +65,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         `${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_API_VERSION}/users`,
         state.user
       );
+      console.log("state.user: ", state.user);
+
       dispatch({
         type: "LOGIN",
         payload: { jwt: res.data.jwt },
