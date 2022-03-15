@@ -10,11 +10,11 @@ export class CreateArticleDto {
   @IsString()
   body: string;
 
-  // @IsNotEmpty()
-  // userId: number;
+  @IsNotEmpty()
+  userId: number;
 
-  // @IsNotEmpty()
-  // author: string;
+  @IsNotEmpty()
+  author: string;
 
   @IsNotEmpty()
   users: Array<User>;

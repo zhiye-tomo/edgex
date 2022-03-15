@@ -2,6 +2,16 @@ import React, { useState } from "react";
 import PostPreview from "../../components/PostPreview";
 import { useAuthDispatch } from "../../context/auth";
 import axios from "axios";
+import jwt_decode from "jwt-decode";
+
+interface DecodedJwt {
+  id: number;
+  email: string;
+  firstName: string;
+  lastName: string;
+  exp: number;
+  iat: number;
+}
 
 export default function PostForm() {
   const [title, setTitle] = useState<string>();
@@ -23,18 +33,23 @@ export default function PostForm() {
     e.preventDefault();
     try {
       console.log(`Bearer ${jwt}`);
+      if (jwt) {
+        const decodedJwt: DecodedJwt = jwt_decode(jwt);
 
-      axios.post(
-        `${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_API_VERSION}/articles`,
-        {
-          title: title,
-          body: body,
-          users: [user],
-        },
-        {
-          headers: { Authorization: `Bearer ${jwt}` },
-        }
-      );
+        axios.post(
+          `${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_API_VERSION}/articles`,
+          {
+            userId: decodedJwt.id,
+            author: decodedJwt.firstName + " " + decodedJwt.lastName,
+            title: title,
+            body: body,
+            users: [user],
+          },
+          {
+            headers: { Authorization: `Bearer ${jwt}` },
+          }
+        );
+      }
     } catch (error) {
       console.log(error);
     }

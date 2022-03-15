@@ -22,19 +22,20 @@ export class Article {
   @Column()
   body: string;
 
+  @Column()
+  userId: number;
+
+  @Column()
+  author: string;
+  @CreateDateColumn()
+  readonly createdAt: Date;
+
+  @UpdateDateColumn()
+  readonly updatedAt: Date;
+
   @ManyToMany((type) => User, (user) => user.articles, {
     cascade: true,
   })
-  // @Column()
-  // userId: number;
-
-  // @Column()
-  // author: string;
-  // @CreateDateColumn()
-  // readonly createdAt: Date;
-
-  // @UpdateDateColumn()
-  // readonly updatedAt: Date;
   @JoinTable()
   users: User[];
 
