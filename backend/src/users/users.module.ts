@@ -1,4 +1,4 @@
-import { Module, UseGuards } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
@@ -10,7 +10,8 @@ import { JwtStrategy } from './jwt.strategy';
   imports: [
     TypeOrmModule.forFeature([User]),
     JwtModule.register({
-      secret: 'qwert',
+      secret: 'secret',
+      // secret: `${process.env.JWT_SECRET_KEY}`,
       signOptions: { expiresIn: '3600s' },
     }),
   ],

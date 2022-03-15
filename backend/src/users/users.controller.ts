@@ -2,13 +2,13 @@ import { Body, Controller, Get, Put, Res, HttpStatus } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { RegisterNewUserDto } from './dto/store-new-user.dto';
 import { Response } from 'express';
-import { Public } from 'src/decorators/skip_auth.decorator';
+import { SkipAuth } from 'src/decorators/skip_auth.decorator';
 
 @Controller('users')
 export class UsersController {
   constructor(private uesrsService: UsersService) {}
 
-  @Public()
+  @SkipAuth()
   @Put()
   async registerOrLogin(
     @Res() res: Response,
@@ -39,5 +39,10 @@ export class UsersController {
         },
       });
     }
+  }
+
+  @Get()
+  getHelloWorld() {
+    return 'Hello World!';
   }
 }

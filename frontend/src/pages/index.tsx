@@ -1,11 +1,27 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
-import { useRouter } from "next/router";
-import Link from "next/link";
+import axios from "axios";
+import { useState } from "react";
+import { useAuthDispatch } from "../context/auth";
 
 const Home: NextPage = () => {
-  const router = useRouter();
+  const [value, setValue] = useState();
+  const { jwt } = useAuthDispatch();
+
+  const handleButton = async () => {
+    console.log("jwt: ", jwt);
+
+    setValue(
+      await axios.get(
+        `${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_API_VERSION}/users`,
+        {
+          headers: { Authorization: `Bearer ${jwt}` },
+        }
+      )
+    );
+    console.log(value?.data);
+  };
   return (
     <div className={styles.container}>
       <Head>
@@ -14,9 +30,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Link href="/article">
-        <a>Create a new article</a>
-      </Link>
+      <button onClick={handleButton}>Button</button>
     </div>
   );
 };

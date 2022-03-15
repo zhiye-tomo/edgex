@@ -5,7 +5,6 @@ import * as ormConfig from '../ormconfig';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
-import { ArticlesModule } from './articles/articles.module';
 import { JwtAuthGuard } from './users/jwt-auth.guard';
 import { APP_GUARD } from '@nestjs/core/constants';
 
@@ -17,7 +16,6 @@ import { APP_GUARD } from '@nestjs/core/constants';
     }),
     TypeOrmModule.forRoot(ormConfig),
     UsersModule,
-    ArticlesModule,
   ],
   controllers: [AppController],
   providers: [

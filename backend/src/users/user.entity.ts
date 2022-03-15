@@ -1,11 +1,4 @@
-import { Article } from 'src/articles/article.entity';
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  AfterInsert,
-  ManyToMany,
-} from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, AfterInsert } from 'typeorm';
 
 @Entity('users')
 export class User {
@@ -19,9 +12,6 @@ export class User {
 
   @Column()
   lastName: string;
-
-  @ManyToMany((type) => Article, (article) => article.users)
-  articles: User[];
 
   @AfterInsert()
   logInsert() {
