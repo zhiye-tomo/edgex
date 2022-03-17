@@ -9,17 +9,19 @@ interface State {
   jwt?: string;
 }
 
+interface Payload {
+  user?: User;
+  jwt?: string;
+}
+
 export interface Action {
   type: string;
-  payload: {
-    user?: User;
-    jwt?: string;
-  };
+  payload: Payload;
 }
 
 const StateContext = createContext<State>({
   authenticated: false,
-  user: undefined,
+  user: null,
   loading: true,
   jwt: "",
 });

@@ -26,19 +26,12 @@ export class UsersService {
     return this.repo.find({ email });
   }
 
-  async returnJwtForNewUser(body: RegisterNewUserDto) {
-    const user = await this.create(body);
-    const jwt = this.generateJWT(user);
-    return jwt;
-  }
-
   generateJWT(user: User) {
-    const token = this.jwtService.sign({
+    return this.jwtService.sign({
       id: user.id,
       email: user.email,
       firstName: user.firstName,
       lastName: user.lastName,
     });
-    return token;
   }
 }

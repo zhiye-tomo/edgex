@@ -28,8 +28,8 @@ export class UsersController {
         });
         return;
       }
-
-      const jwt = await this.uesrsService.returnJwtForNewUser(body);
+      const user = await this.uesrsService.create(body);
+      const jwt = this.uesrsService.generateJWT(user);
       res.status(HttpStatus.CREATED).json({ success: true, jwt });
     } catch (error) {
       res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
