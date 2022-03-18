@@ -26,6 +26,13 @@ const StateContext = createContext<State>({
   jwt: "",
 });
 
+const initialValue = {
+  user: null,
+  authenticated: false,
+  loading: true,
+  jwt: "",
+};
+
 const DispatchContext = createContext((() => true) as React.Dispatch<Action>);
 
 const reducer: React.Reducer<State, Action> = (
@@ -52,12 +59,7 @@ const reducer: React.Reducer<State, Action> = (
 };
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [state, dispatch] = useReducer(reducer, {
-    user: null,
-    authenticated: false,
-    loading: true,
-    jwt: "",
-  });
+  const [state, dispatch] = useReducer(reducer, initialValue);
 
   useEffect(() => {
     async function registerNewUser() {
