@@ -1,6 +1,7 @@
 import { createContext, useReducer, useContext, useEffect } from "react";
 import { User } from "../types";
 import axios from "axios";
+import { myEnv } from "../env";
 
 interface State {
   authenticated?: boolean;
@@ -58,11 +59,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     async function registerNewUser() {
-      console.log("state.user", state.user);
-      const res = await axios.put(
-        `${process.env.NEXT_PUBLIC_HOST}/users`,
-        state.user
-      );
+      const res = await axios.put(`${myEnv.host}/users`, state.user);
 
       dispatch({
         type: "LOGIN",

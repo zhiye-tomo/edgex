@@ -4,18 +4,17 @@ import styles from "../styles/Home.module.css";
 import axios from "axios";
 import { useState } from "react";
 import { useAuthDispatch } from "../context/auth";
+import { myEnv } from "../env";
 
 const Home: NextPage = () => {
   const [value, setValue] = useState();
   const { jwt } = useAuthDispatch();
 
   const handleButton = async () => {
-    console.log(jwt);
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_HOST}/users`, {
+    const res = await axios.get(`${myEnv.host}/users`, {
       headers: { Authorization: `Bearer ${jwt}` },
     });
     setValue(res.data);
-    console.log(value);
   };
   return (
     <div className={styles.container}>
