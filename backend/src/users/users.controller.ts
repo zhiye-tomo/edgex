@@ -15,10 +15,9 @@ export class UsersController {
     @Body() body: RegisterNewUserDto,
   ) {
     try {
-      const users = await this.uesrsService.find(body.email);
-      if (users.length) {
-        const user = users[0];
-        const jwt = await this.uesrsService.generateJWT(user);
+      const registerdUser = await this.uesrsService.findOne(body.email);
+      if (registerdUser) {
+        const jwt = await this.uesrsService.generateJWT(registerdUser);
         res.status(HttpStatus.OK).json({
           error: {
             code: 'email_already_exists',

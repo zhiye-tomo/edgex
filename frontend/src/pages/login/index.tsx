@@ -7,15 +7,14 @@ import {
 import { useAuthDispatch, useDispatchState } from "../../context/auth";
 import { useRouter } from "next/router";
 
+type Res = GoogleLoginResponseOffline | GoogleLoginResponse;
 const GoogleSignInComponent: FunctionComponent = () => {
   const [loginFailed, setLoginFailed] = useState<boolean>();
   const { authenticated, loading, user } = useAuthDispatch();
   const dispatch = useDispatchState();
   const router = useRouter();
 
-  const onLoginSuccess = async (
-    res: GoogleLoginResponseOffline | GoogleLoginResponse
-  ) => {
+  const onLoginSuccess = async (res: Res) => {
     if ("profileObj" in res) {
       const profileObj = res.profileObj;
       dispatch({
@@ -46,12 +45,6 @@ const GoogleSignInComponent: FunctionComponent = () => {
     router.push("/");
   };
 
-  const logCat = () => {
-    console.log(
-      `${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_API_VERSION}/users`
-    );
-  };
-
   return (
     <div>
       <h1>Welcome to Edge</h1>
@@ -68,7 +61,6 @@ const GoogleSignInComponent: FunctionComponent = () => {
         responseType="code,token"
       />
       <button onClick={login}>Login</button>
-      <button onClick={logCat}>LogCat</button>
     </div>
   );
 };

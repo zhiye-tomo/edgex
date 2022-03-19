@@ -4,6 +4,9 @@ const nextConfig = {
   compilerOptions: {
     baseUrl: "src",
   },
+  env: {
+    host: "host",
+  },
   async redirects() {
     return [
       {

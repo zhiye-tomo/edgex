@@ -19,19 +19,14 @@ export interface Action {
   payload: Payload;
 }
 
-const StateContext = createContext<State>({
-  authenticated: false,
-  user: null,
-  loading: true,
-  jwt: "",
-});
-
 const initialValue = {
   user: null,
   authenticated: false,
   loading: true,
   jwt: "",
 };
+
+const StateContext = createContext<State>(initialValue);
 
 const DispatchContext = createContext((() => true) as React.Dispatch<Action>);
 
@@ -63,17 +58,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     async function registerNewUser() {
+      console.log("state.user", state.user);
       const res = await axios.put(
-        `${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_API_VERSION}/users`,
+        `${process.env.NEXT_PUBLIC_HOST}/users`,
         state.user
       );
+
       dispatch({
         type: "LOGIN",
         payload: { jwt: res.data.jwt },
       });
     }
-    registerNewUser();
-  }, [state.authenticated]);
+    if (!state.jwt) {
+      registerNewUser();
+    }
+  });
 
   return (
     <DispatchContext.Provider value={dispatch}>
