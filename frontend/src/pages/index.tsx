@@ -7,13 +7,17 @@ import { useAuthDispatch } from "../context/auth";
 import { myEnv } from "../env";
 
 const Home: NextPage = () => {
-  const [value, setValue] = useState();
+  const [value, setValue] = useState("");
   const { jwt } = useAuthDispatch();
 
   const handleButton = async () => {
     const res = await axios.get(`${myEnv.host}/users`, {
       headers: { Authorization: `Bearer ${jwt}` },
     });
+    if (value) {
+      setValue("");
+      return;
+    }
     setValue(res.data);
   };
   return (

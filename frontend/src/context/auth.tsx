@@ -66,6 +66,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         payload: { jwt: res.data.jwt },
       });
     }
+
     if (!state.jwt) {
       registerNewUser();
     }
