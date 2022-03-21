@@ -31,20 +31,6 @@ const GoogleSignInComponent: FunctionComponent = () => {
     }
   };
 
-  const login = async () => {
-    dispatch({
-      type: "OAUTH",
-      payload: {
-        user: {
-          email: "kaka@test.com",
-          firstName: "firstName",
-          lastName: "lastName",
-        },
-      },
-    });
-    router.push("/");
-  };
-
   return (
     <div>
       <h1>Welcome to Edge</h1>
@@ -60,7 +46,6 @@ const GoogleSignInComponent: FunctionComponent = () => {
         cookiePolicy={"single_host_origin"}
         responseType="code,token"
       />
-      <button onClick={login}>Login</button>
     </div>
   );
 };
