@@ -16,14 +16,14 @@ const GoogleSignInComponent: FunctionComponent = () => {
 
   const onLoginSuccess = async (res: Res) => {
     if ("profileObj" in res) {
-      const profileObj = res.profileObj;
+      const profile = res.profileObj;
       dispatch({
         type: "OAUTH",
         payload: {
           user: {
-            email: profileObj.email,
-            firstName: profileObj.givenName,
-            lastName: profileObj.familyName,
+            email: profile.email,
+            firstName: profile.givenName,
+            lastName: profile.familyName,
           },
         },
       });

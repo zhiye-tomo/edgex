@@ -39,9 +39,4 @@ export class UsersController {
       });
     }
   }
-
-  @Get()
-  getHelloWorld() {
-    return 'Hello World!';
-  }
 }
