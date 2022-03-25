@@ -1,5 +1,7 @@
+@use "variables" as c;
 .container {
   padding: 0 2rem;
+  color: c.$primary-color;
 }
 
 .main {

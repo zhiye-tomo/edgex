@@ -4,13 +4,13 @@ import {
   GoogleLoginResponse,
   GoogleLoginResponseOffline,
 } from "react-google-login";
-import { useAuthDispatch, useDispatchState } from "../../context/auth";
+import { useDispatchState } from "../../context/auth";
 import { useRouter } from "next/router";
+import styles from "../styles/components/x.module.scss";
 
 type Res = GoogleLoginResponseOffline | GoogleLoginResponse;
 const GoogleSignInComponent: FunctionComponent = () => {
   const [loginFailed, setLoginFailed] = useState<boolean>();
-  const { authenticated, loading, user } = useAuthDispatch();
   const dispatch = useDispatchState();
   const router = useRouter();
 
@@ -33,7 +33,7 @@ const GoogleSignInComponent: FunctionComponent = () => {
 
   return (
     <div>
-      <h1>Welcome to Edge</h1>
+      <h1 className={styles.primaryColor}>Welcome to Edge</h1>
       {loginFailed && <h3>Could not sign you in! Try again.</h3>}
       <GoogleLogin
         clientId={`${process.env.NEXT_PUBLIC_GOOGLE}`}

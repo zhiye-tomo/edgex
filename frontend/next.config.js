@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
+const path = require("path");
+
 const nextConfig = {
   reactStrictMode: true,
   compilerOptions: {
@@ -6,6 +8,9 @@ const nextConfig = {
   },
   env: {
     host: "host",
+  },
+  sassOptions: {
+    includePaths: [path.join(__dirname, "src/styles")],
   },
   async redirects() {
     return [
