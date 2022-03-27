@@ -1,6 +1,10 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import styles from "../styles/layouts/top.module.scss";
+import { Navigation } from "components/BaseComponent/Navigation";
+import { SideFooter } from "components/BaseComponent/SideFooter";
+import { Footer } from "components/BaseComponent/Footer";
+import { MainSection } from "components/BaseComponent/MainSection";
 
 const Home: NextPage = () => {
   return (
@@ -11,20 +15,12 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <aside className={styles.navigation}>
-        <nav>
-          <ul className={styles.lists}>
-            <li className={styles.li}>list1</li>
-            <li className={styles.li}>list2</li>
-            <li className={styles.li}>list3</li>
-            <li className={styles.li}>list4</li>
-            <li className={styles.li}>list5</li>
-          </ul>
-        </nav>
-        <div className={styles.sideFooter}>side footer</div>
+        <Navigation />
+        <SideFooter />
       </aside>
 
-      <main className={styles.main}>Main</main>
-      <footer className={styles.footer}>Footer</footer>
+      <MainSection />
+      <Footer />
     </div>
   );
 };

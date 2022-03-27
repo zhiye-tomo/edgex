@@ -8,28 +8,6 @@
   bottom: 0;
   width: 100%;
 }
-.lists {
-  display: flex;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  .li {
-    flex: 1;
-    text-align: center;
-  }
-}
-.sideFooter {
-  display: none;
-}
-.main {
-  width: 100%;
-  flex: 1;
-}
-.footer {
-  width: 100%;
-  position: fixed;
-  bottom: 19px;
-}
 
 @media (min-width: 700px) {
   .container {
@@ -37,25 +15,11 @@
     height: 0;
     min-height: 100vh;
   }
-  .main {
-    width: 700px;
-  }
   .navigation {
     width: 20%;
     min-width: 250px;
     position: unset;
     display: flex;
     flex-direction: column;
-  }
-  .lists {
-    display: block;
-  }
-  .sideFooter {
-    display: block;
-    height: 300px;
-    margin-top: auto;
-  }
-  .footer {
-    display: none;
   }
 }
