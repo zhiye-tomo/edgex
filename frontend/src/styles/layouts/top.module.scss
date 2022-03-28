@@ -1,5 +1,4 @@
 @use "variables" as v;
-// @use "sass:math";
 
 .container {
   display: flex;
@@ -20,7 +19,6 @@
   .navigation {
     width: 20%;
     min-width: 250px;
-    position: unset;
     display: flex;
     flex-direction: column;
     border-right: solid 1px;
