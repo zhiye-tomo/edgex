@@ -12,8 +12,8 @@
 
 @media (min-width: 700px) {
   .container {
-    flex-direction: row-reverse;
-    height: 0;
+    width: 100%;
+    flex-direction: row;
     min-height: 100vh;
   }
   .navigation {
