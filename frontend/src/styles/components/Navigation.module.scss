@@ -25,7 +25,9 @@
 
 @media (min-width: 700px) {
   .lists {
-    display: block;
+    flex-direction: column;
+    .li {
+    }
   }
   .link {
     display: block;
