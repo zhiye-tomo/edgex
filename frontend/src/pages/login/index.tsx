@@ -4,13 +4,12 @@ import {
   GoogleLoginResponse,
   GoogleLoginResponseOffline,
 } from "react-google-login";
-import { useAuthDispatch, useDispatchState } from "../../context/auth";
+import { useDispatchState } from "../../context/auth";
 import { useRouter } from "next/router";
 
 type Res = GoogleLoginResponseOffline | GoogleLoginResponse;
 const GoogleSignInComponent: FunctionComponent = () => {
   const [loginFailed, setLoginFailed] = useState<boolean>();
-  const { authenticated, loading, user } = useAuthDispatch();
   const dispatch = useDispatchState();
   const router = useRouter();
 

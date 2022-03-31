@@ -1,0 +1,10 @@
+.footer {
+  display: flex;
+}
+
+@media (min-width: 700px) {
+  .footer {
+    height: 300px;
+    margin-top: auto;
+  }
+}
