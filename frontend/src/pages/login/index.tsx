@@ -6,6 +6,7 @@ import {
 } from "react-google-login";
 import { useDispatchState } from "../../context/auth";
 import { useRouter } from "next/router";
+import styles from "../../styles/layouts/login.module.scss";
 
 type Res = GoogleLoginResponseOffline | GoogleLoginResponse;
 const GoogleSignInComponent: FunctionComponent = () => {
@@ -31,8 +32,8 @@ const GoogleSignInComponent: FunctionComponent = () => {
   };
 
   return (
-    <div>
-      <h1>Welcome to Edge</h1>
+    <div className={styles.container}>
+      <h1>Edgex</h1>
       {loginFailed && <h3>Could not sign you in! Try again.</h3>}
       <GoogleLogin
         clientId={`${process.env.NEXT_PUBLIC_GOOGLE}`}
