@@ -5,24 +5,29 @@ import { Navigation } from "components/baseComponent/Navigation";
 import styles from "../../styles/layouts/tag.module.scss";
 import { tagCreationSchema } from "utils/validation/schema";
 import { useFormik } from "formik";
+import axios from "axios";
+import { host } from "../../constants";
+import { useAuthDispatch } from "../../context/auth";
 
-// type Tag = {
-//   tag: string;
-// };
+type Tag = {
+  tag: string;
+};
 
 const Tag: NextPage = () => {
-  const initialValues = {
+  const { jwt, user } = useAuthDispatch();
+  const initialValues: Tag = {
     tag: "",
   };
 
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: tagCreationSchema,
-    onSubmit: () => console.log("ニャン"),
+    onSubmit: async () => {
+      const res = await axios.post(`${host}/users`);
+    },
   });
 
-  const { values, errors, touched, handleSubmit, handleChange, setValues } =
-    formik;
+  const { values, errors, touched, handleSubmit, handleChange } = formik;
 
   return (
     <div className={styles.container}>
@@ -45,7 +50,9 @@ const Tag: NextPage = () => {
             onChange={handleChange}
             value={values.tag}
           />
-          {errors.tag ? <p>{errors.tag}</p> : null}
+          {errors.tag && touched.tag ? (
+            <p className={styles.error}>{errors.tag}</p>
+          ) : null}
           <button type="submit">Submit</button>
         </form>
       </main>

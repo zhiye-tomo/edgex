@@ -20,4 +20,8 @@
 .main {
   flex: 1;
   overflow: scroll;
+  padding: 3px;
+}
+.error {
+  color: tomato;
 }
