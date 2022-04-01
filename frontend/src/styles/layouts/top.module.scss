@@ -1,28 +1,24 @@
 @use "variables" as v;
+@use "utils" as u;
 
 .container {
   display: flex;
   flex-direction: column;
   overflow: hidden;
   height: 100vh;
-}
-.navigation {
-  width: 100%;
-}
-
-@media (min-width: 700px) {
-  .container {
+  @include u.mq(large) {
     width: 100%;
     flex-direction: row;
     min-height: 100vh;
   }
-  .navigation {
+}
+.navigation {
+  width: 100%;
+  @include u.mq(large) {
     width: 20%;
     min-width: 250px;
+    position: unset;
     display: flex;
     flex-direction: column;
-    border-right: solid 1px;
-    border-right-color: v.$primaryColor;
-    background-color: mix(white, v.$primaryColor, 85);
   }
 }
