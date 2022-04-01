@@ -1,6 +1,6 @@
-@use "utils" as u;
+@use "utils";
 
-@include u.mq(large) {
+@include utils.mediaQuery(large) {
   .container {
     display: flex;
     flex-direction: column;
