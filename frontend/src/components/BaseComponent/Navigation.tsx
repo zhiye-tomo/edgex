@@ -8,7 +8,7 @@ type Nav = {
 
 export const Navigation: React.FC = () => {
   const navs: Array<Nav> = [
-    { name: "Top", link: "xxx" },
+    { name: "Top", link: "/" },
     { name: "Search", link: "xxx" },
     { name: "Article", link: "xxx" },
     { name: "Group", link: "" },
