@@ -1,9 +1,8 @@
+@use "utils" as u;
+
 .footer {
   display: flex;
-}
-
-@media (min-width: 700px) {
-  .footer {
+  @include u.mq(large) {
     height: 300px;
     margin-top: auto;
   }
