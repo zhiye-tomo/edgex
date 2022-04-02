@@ -7,6 +7,7 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { JwtAuthGuard } from './users/jwt-auth.guard';
 import { APP_GUARD } from '@nestjs/core/constants';
+import { TagsModule } from './tags/tags.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { APP_GUARD } from '@nestjs/core/constants';
     }),
     TypeOrmModule.forRoot(ormConfig),
     UsersModule,
+    TagsModule,
   ],
   controllers: [AppController],
   providers: [
