@@ -12,10 +12,7 @@ const Home: NextPage = () => {
     <div className={styles.container}>
       <Head>
         <title>Create Nest App</title>
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scacle=1.0"
-        />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       {isPcSite ? <PCContent /> : <MobileContent />}
