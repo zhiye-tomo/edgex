@@ -35,6 +35,7 @@ export class UsersController {
         error: {
           code: 'internal_server_error',
           message: 'Internal server error',
+          whatError: error,
         },
       });
     }
