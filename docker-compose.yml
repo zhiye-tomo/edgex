@@ -7,7 +7,6 @@ services:
       dockerfile: docker/services/frontend/Dockerfile
     volumes:
       - ./frontend:/var/frontend
-      - /var/frontend/node_modules
     working_dir: /var/frontend
     ports:
       - "3000:3000"
@@ -22,7 +21,6 @@ services:
       dockerfile: docker/services/backend/Dockerfile
     volumes:
       - ./backend:/var/backend
-      - /var/backend/node_modules
     working_dir: /var/backend
     ports:
       - "3001:3001"
