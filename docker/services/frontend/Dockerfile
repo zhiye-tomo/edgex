@@ -1,4 +1,3 @@
-
 FROM node:alpine
 WORKDIR /var/frontend
 COPY ./frontend .
