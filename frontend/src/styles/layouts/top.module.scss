@@ -1,4 +1,4 @@
-@use "variables" as v;
+@use "variables";
 
 .container {
   display: flex;
@@ -22,7 +22,7 @@
     display: flex;
     flex-direction: column;
     border-right: solid 1px;
-    border-right-color: v.$primaryColor;
-    background-color: mix(white, v.$primaryColor, 85);
+    border-right-color: variables.$primaryColor;
+    background-color: mix(white, variables.$primaryColor, 85);
   }
 }
