@@ -1,12 +1,33 @@
 import { NextPage } from "next";
 import { Meta } from "../../components/Meta";
+import { useState } from "react";
 import { Footer } from "components/baseComponent/Footer";
 import { Navigation } from "components/baseComponent/Navigation";
 import styles from "../../styles/layouts/tag.module.scss";
 import { CreateTagForm } from "../../components/CreateTagForm";
-import { TagList } from "../../components/TagList";
+import { TagList } from "components/TagList";
+import { useAuthDispatch } from "context/auth";
+import { Tag } from "../../types";
+import { host } from "../../constants";
+import { config } from "utils/config";
+import axios from "axios";
 
-const Tag: NextPage = () => {
+const TagPage: NextPage = () => {
+  const [tags, setTags] = useState<Tag[]>([]);
+  const { jwt } = useAuthDispatch();
+
+  const getTags = async () => {
+    const res = await axios.get(`${host}/tags`, config(jwt ?? ""));
+    console.log(res.data.items);
+
+    setTags(res.data.items);
+  };
+
+  const createTag = async (name: string) => {
+    await axios.post(`${host}/tags`, { name: name }, config(jwt ?? ""));
+    getTags();
+  };
+
   return (
     <div className={styles.container}>
       <Meta
@@ -18,11 +39,11 @@ const Tag: NextPage = () => {
         <Footer />
       </aside>
       <main className={styles.main}>
-        <CreateTagForm />
-        <TagList />
+        <CreateTagForm createTag={createTag} />
+        <TagList getTags={getTags} tags={tags} />
       </main>
     </div>
   );
 };
 
-export default Tag;
+export default TagPage;

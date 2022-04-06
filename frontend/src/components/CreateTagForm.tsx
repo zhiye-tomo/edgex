@@ -1,17 +1,15 @@
 import { tagCreationSchema } from "utils/validation/schema";
 import { useFormik } from "formik";
-import axios from "axios";
-import { host } from "../constants";
-import { useAuthDispatch } from "../context/auth";
-import { config } from "../utils/config";
+
+interface Props {
+  createTag: (name: string) => Promise<void>;
+}
 
 type InitialValue = {
   tag: string;
 };
 
-export const CreateTagForm: React.FC = ({}) => {
-  const { jwt } = useAuthDispatch();
-
+export const CreateTagForm: React.FC<Props> = ({ createTag }: Props) => {
   const initialValues: InitialValue = {
     tag: "",
   };
@@ -19,10 +17,9 @@ export const CreateTagForm: React.FC = ({}) => {
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: tagCreationSchema,
-    onSubmit: async () => {
-      await axios.post(`${host}/tags`, { name: values.tag }, config(jwt ?? ""));
-    },
+    onSubmit: () => createTag(values.tag),
   });
+
   const { values, errors, touched, handleSubmit, handleChange } = formik;
 
   return (
