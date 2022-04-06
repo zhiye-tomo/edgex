@@ -3,21 +3,16 @@ import { useFormik } from "formik";
 import axios from "axios";
 import { host } from "../constants";
 import { useAuthDispatch } from "../context/auth";
+import { config } from "../utils/config";
 
-type Tag = {
+type InitialValue = {
   tag: string;
 };
 
 export const CreateTagForm: React.FC = ({}) => {
   const { jwt } = useAuthDispatch();
 
-  const config = {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${jwt}`,
-    },
-  };
-  const initialValues: Tag = {
+  const initialValues: InitialValue = {
     tag: "",
   };
 
@@ -25,7 +20,7 @@ export const CreateTagForm: React.FC = ({}) => {
     initialValues: initialValues,
     validationSchema: tagCreationSchema,
     onSubmit: async () => {
-      await axios.post(`${host}/tags`, { name: values.tag }, config);
+      await axios.post(`${host}/tags`, { name: values.tag }, config(jwt ?? ""));
     },
   });
   const { values, errors, touched, handleSubmit, handleChange } = formik;

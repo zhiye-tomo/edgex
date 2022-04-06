@@ -5,14 +5,16 @@ import {
   AfterInsert,
   CreateDateColumn,
   UpdateDateColumn,
+  Unique,
 } from 'typeorm';
 
 @Entity('tags')
+// @Unique(['name'])
 export class Tag {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ unique: true })
   name: string;
 
   @CreateDateColumn()

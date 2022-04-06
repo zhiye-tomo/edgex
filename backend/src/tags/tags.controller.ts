@@ -7,7 +7,12 @@ import {
   Get,
   Delete,
   Param,
+  DefaultValuePipe,
+  ParseIntPipe,
+  Query,
 } from '@nestjs/common';
+import { Tag } from './tag.entity';
+import { Pagination } from 'nestjs-typeorm-paginate';
 import { CreateTagDto } from './dto/create-tag.dto';
 import { Response } from 'express';
 import { TagsService } from './tags.service';
@@ -23,10 +28,17 @@ export class TagsController {
   }
 
   @Get()
-  async getAllTags(@Res() res: Response) {
-    const tags = await this.tagService.find();
+  async getTags(
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
+  ): Promise<Pagination<Tag>> {
+    limit = limit > 50 ? 50 : limit;
+    console.log('foo');
 
-    res.status(HttpStatus.OK).json({ tags: tags });
+    return this.tagService.search({
+      page,
+      limit,
+    });
   }
 
   @Delete('/:id')

@@ -2,28 +2,16 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { host } from "../constants";
 import { useAuthDispatch } from "../context/auth";
+import { Tag } from "../types";
+import { config } from "utils/config";
 
-type Tag = {
-  name: string;
-  createdAt: string;
-  updatedAt: string;
-  id: string;
-};
-
-export const TagList: React.FC = () => {
-  const [tags, setTags] = useState<Array<Tag>>([]);
+const TagList: React.FC = () => {
+  const [tags, setTags] = useState<Tag[]>([]);
   const { jwt } = useAuthDispatch();
 
-  const config = {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${jwt}`,
-    },
-  };
-
   const getTags = async () => {
-    const res = await axios.get(`${host}/tags`, config);
-    setTags(res.data.tags.map((tag: string) => tag));
+    const res = await axios.get(`${host}/tags`, config(jwt ?? ""));
+    setTags(res.data.tags);
   };
 
   useEffect(() => {
@@ -32,11 +20,6 @@ export const TagList: React.FC = () => {
     }
   }, [tags]);
 
-  return (
-    <div>
-      {tags.map((tag) => {
-        return <div>{tag.name}</div>;
-      })}
-    </div>
-  );
+  return <div>{tags ? tags.map((tag) => <div>{tag.name}</div>) : null}</div>;
 };
+export default TagList;

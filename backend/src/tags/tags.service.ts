@@ -3,29 +3,41 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Tag } from './tag.entity';
 import { CreateTagDto } from './dto/create-tag.dto';
+import {
+  paginate,
+  Pagination,
+  IPaginationOptions,
+} from 'nestjs-typeorm-paginate';
+
+type SearchOptions = {
+  word?: string;
+} & IPaginationOptions;
 
 @Injectable()
 export class TagsService {
   constructor(@InjectRepository(Tag) private repo: Repository<Tag>) {}
-  async create(body: CreateTagDto) {
+  async create(body: CreateTagDto): Promise<Tag> {
     const tag = this.repo.create(body);
 
-    return this.repo.save(tag);
+    return await this.repo.save(tag);
   }
 
-  find(): Promise<Array<Tag>> {
-    return this.repo.find();
+  async search(options: SearchOptions): Promise<Pagination<Tag>> {
+    const queryBuilder = this.repo.createQueryBuilder('tag');
+    queryBuilder.orderBy('tag.name', 'ASC');
+
+    return paginate<Tag>(queryBuilder, options);
   }
 
-  findOneOrFail(id: number) {
+  findOne(id: number) {
     if (!id) {
       return null;
     }
-    return this.repo.findOneOrFail({ id });
+    return this.repo.findOne({ id });
   }
 
   async remove(id: number) {
-    const tag = await this.findOneOrFail(id);
+    const tag = await this.findOne(id);
     this.repo.remove(tag);
   }
 }
