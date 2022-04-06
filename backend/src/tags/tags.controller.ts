@@ -24,7 +24,7 @@ export class TagsController {
   async createTag(@Res() res: Response, @Body() body: CreateTagDto) {
     const { id, name } = await this.tagService.create(body);
 
-    res.status(HttpStatus.CREATED).json({ tag: { id: id, name: name } });
+    res.status(HttpStatus.CREATED).json({ tag: { id, name } });
   }
 
   @Get()
@@ -41,8 +41,9 @@ export class TagsController {
   }
 
   @Delete('/:id')
-  removeTag(@Res() res: Response, @Param('id') id: string) {
+  removeTag(@Param('id') id: string) {
     this.tagService.remove(parseInt(id));
-    res.json(null);
+
+    return null;
   }
 }
