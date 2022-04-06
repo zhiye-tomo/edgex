@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Tag } from './tag.entity';
@@ -38,6 +38,9 @@ export class TagsService {
 
   async remove(id: number) {
     const tag = await this.findOne(id);
+    if (!tag) {
+      throw new NotFoundException('tag not found');
+    }
     this.repo.remove(tag);
   }
 }
