@@ -5,6 +5,7 @@ import {
   AfterInsert,
   CreateDateColumn,
   UpdateDateColumn,
+  DeleteDateColumn,
 } from 'typeorm';
 
 @Entity('tags')
@@ -20,6 +21,9 @@ export class Tag {
 
   @UpdateDateColumn()
   readonly updatedAt: Date;
+
+  @DeleteDateColumn()
+  readonly deletedAt: Date;
 
   @AfterInsert()
   logInsert() {
