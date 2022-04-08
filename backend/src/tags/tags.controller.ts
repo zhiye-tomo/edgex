@@ -24,7 +24,7 @@ export class TagsController {
   async createTag(@Res() res: Response, @Body() body: CreateTagDto) {
     const { id, name } = await this.tagService.create(body);
 
-    res.status(HttpStatus.CREATED).json({ tag: { id, name } });
+    res.status(HttpStatus.CREATED).json({ tag: { id: id, name: name } });
   }
 
   @Get()
@@ -33,6 +33,7 @@ export class TagsController {
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
   ): Promise<Pagination<Tag>> {
     limit = limit > 50 ? 50 : limit;
+    console.log('foo');
 
     return this.tagService.search({
       page,
@@ -41,9 +42,13 @@ export class TagsController {
   }
 
   @Delete('/:id')
-  removeTag(@Param('id') id: string) {
-    this.tagService.remove(parseInt(id));
-
-    return null;
+  async removeTag(@Res() res: Response, @Param('id') id: string) {
+    if (id) {
+      await this.tagService.remove(parseInt(id));
+      res.json(null);
+    }
+    res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+      error: 'Something went wrong',
+    });
   }
 }
