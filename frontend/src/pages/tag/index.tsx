@@ -28,6 +28,11 @@ const TagPage: NextPage = () => {
     getTags();
   };
 
+  const handleClick: (id: number) => Promise<void> = async (id) => {
+    await axios.delete(`${host}/tags/${id}`, config(jwt ?? ""));
+    getTags();
+  };
+
   return (
     <div className={styles.container}>
       <Meta
@@ -40,7 +45,7 @@ const TagPage: NextPage = () => {
       </aside>
       <main className={styles.main}>
         <CreateTagForm createTag={createTag} />
-        <TagList getTags={getTags} tags={tags} />
+        <TagList getTags={getTags} tags={tags} handleClick={handleClick} />
       </main>
     </div>
   );

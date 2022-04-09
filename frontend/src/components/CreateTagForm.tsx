@@ -17,10 +17,14 @@ export const CreateTagForm: React.FC<Props> = ({ createTag }: Props) => {
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: tagCreationSchema,
-    onSubmit: () => createTag(values.tag),
+    onSubmit: () => {
+      createTag(values.tag);
+      handleReset(values.tag);
+    },
   });
 
-  const { values, errors, touched, handleSubmit, handleChange } = formik;
+  const { values, errors, touched, handleSubmit, handleChange, handleReset } =
+    formik;
 
   return (
     <form onSubmit={handleSubmit}>

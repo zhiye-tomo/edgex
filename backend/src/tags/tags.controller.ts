@@ -45,7 +45,7 @@ export class TagsController {
   async removeTag(@Res() res: Response, @Param('id') id: string) {
     if (id) {
       await this.tagService.remove(parseInt(id));
-      res.json(null);
+      return res.json(null);
     }
     res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
       error: 'Something went wrong',

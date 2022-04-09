@@ -31,6 +31,7 @@ export class UsersController {
       const jwt = this.uesrsService.generateJWT(user);
       res.status(HttpStatus.CREATED).json({ success: true, jwt });
     } catch (error) {
+      console.log(error);
       res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
         error: {
           code: 'internal_server_error',

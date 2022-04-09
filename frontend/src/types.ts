@@ -1,13 +1,13 @@
 export interface User {
-  id?: number;
+  id: number;
   email: string;
   firstName: string;
   lastName: string;
 }
 
 export interface Tag {
-  name: string;
+  name: number;
   createdAt: string;
   updatedAt: string;
-  id: string;
+  id: number;
 }
