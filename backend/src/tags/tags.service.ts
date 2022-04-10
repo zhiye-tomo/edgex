@@ -38,6 +38,9 @@ export class TagsService {
 
   async remove(id: number) {
     const tag = await this.findOne(id);
+    if (!tag) {
+      return null;
+    }
     this.repo.remove(tag);
   }
 }

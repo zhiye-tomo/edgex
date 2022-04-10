@@ -10,12 +10,14 @@ import {
   DefaultValuePipe,
   ParseIntPipe,
   Query,
+  NotFoundException,
 } from '@nestjs/common';
 import { Tag } from './tag.entity';
 import { Pagination } from 'nestjs-typeorm-paginate';
 import { CreateTagDto } from './dto/create-tag.dto';
 import { Response } from 'express';
 import { TagsService } from './tags.service';
+import { NotFoundError } from 'rxjs';
 
 @Controller('tags')
 export class TagsController {
@@ -44,9 +46,16 @@ export class TagsController {
   @Delete('/:id')
   async removeTag(@Res() res: Response, @Param('id') id: string) {
     if (id) {
-      await this.tagService.remove(parseInt(id));
-      res.status(204).json(null);
+      const result = await this.tagService.remove(parseInt(id));
+
+      if (result === 'NotFoundException') {
+        console.log('dog');
+        throw NotFoundException;
+      }
+      console.log('cat');
+      return res.status(204).json(null);
     }
+    console.log('cat2');
     res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
       error: 'Something went wrong',
     });
