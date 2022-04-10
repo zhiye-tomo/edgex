@@ -1,20 +1,17 @@
 import { useEffect } from "react";
-import { useAuthDispatch } from "context/auth";
 import { Tag } from "../types";
 
 interface Props {
   getTags: () => Promise<void>;
-  handleClick: (id: number) => Promise<void>;
+  deleteTag: (id: number) => Promise<void>;
   tags: Tag[];
 }
 
 export const TagList: React.FC<Props> = ({
   getTags,
-  handleClick,
+  deleteTag,
   tags,
 }: Props) => {
-  const { jwt } = useAuthDispatch();
-
   useEffect(() => {
     if (!tags.length) {
       getTags();
@@ -25,7 +22,7 @@ export const TagList: React.FC<Props> = ({
     <div>
       {tags
         ? tags.map((tag) => (
-            <button key={tag.id} onClick={() => handleClick(tag.id)}>
+            <button key={tag.id} onClick={() => deleteTag(tag.id)}>
               {tag.name}
             </button>
           ))

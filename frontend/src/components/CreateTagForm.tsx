@@ -18,7 +18,9 @@ export const CreateTagForm: React.FC<Props> = ({ createTag }: Props) => {
     initialValues: initialValues,
     validationSchema: tagCreationSchema,
     onSubmit: () => {
-      createTag(values.tag);
+      createTag(values.tag.trim());
+      console.log(values.tag.trim());
+
       handleReset(values.tag);
     },
   });

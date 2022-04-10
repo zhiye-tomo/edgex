@@ -33,7 +33,6 @@ export class TagsController {
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
   ): Promise<Pagination<Tag>> {
     limit = limit > 50 ? 50 : limit;
-    console.log('foo');
 
     return this.tagService.search({
       page,
