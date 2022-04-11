@@ -5,10 +5,11 @@ import {
   AfterInsert,
   CreateDateColumn,
   UpdateDateColumn,
+  DeleteDateColumn,
 } from 'typeorm';
 
-@Entity('tags')
-export class Tag {
+@Entity('groups')
+export class Group {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -16,13 +17,16 @@ export class Tag {
   name: string;
 
   @CreateDateColumn()
-  createdAt: Date;
+  craeteAt: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updateAt: Date;
+
+  @DeleteDateColumn()
+  deletedAt: Date;
 
   @AfterInsert()
   logInsert() {
-    console.log('Inserted Tag with id: ', this.id);
+    console.log('Inserted Group with id: ', this.id);
   }
 }
