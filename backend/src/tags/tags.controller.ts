@@ -17,6 +17,7 @@ import { Pagination } from 'nestjs-typeorm-paginate';
 import { CreateTagDto } from './dto/create-tag.dto';
 import { Response } from 'express';
 import { TagsService } from './tags.service';
+import { DeleteTagDto } from './dto/delete-tag.dto';
 
 @Controller('tags')
 export class TagsController {
@@ -43,18 +44,13 @@ export class TagsController {
   }
 
   @Delete('/:id')
-  async removeTag(@Res() res: Response, @Param('id') id: string) {
-    if (id) {
-      const tag = await this.tagsService.findOneById(parseInt(id));
-      if (!tag) {
-        throw new NotFoundException('Tag does not exist');
-      }
-      await this.tagsService.remove(parseInt(id));
-
-      return res.status(204).send();
+  async removeTag(@Res() res: Response, @Param() dto: DeleteTagDto) {
+    const tag = await this.tagsService.findOneById(parseInt(dto.id));
+    if (!tag) {
+      throw new NotFoundException('Tag does not exist');
     }
-    res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-      error: 'Something went wrong',
-    });
+    await this.tagsService.remove(parseInt(dto.id));
+
+    return res.status(204).send();
   }
 }

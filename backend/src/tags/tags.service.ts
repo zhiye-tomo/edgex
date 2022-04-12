@@ -3,6 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Tag } from './tag.entity';
 import { CreateTagDto } from './dto/create-tag.dto';
+import { DeleteTagDto } from './dto/delete-tag.dto';
+
 import {
   paginate,
   Pagination,
