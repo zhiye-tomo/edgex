@@ -16,7 +16,7 @@ export class TagsService {
   constructor(@InjectRepository(Tag) private repo: Repository<Tag>) {}
   async create(body: CreateTagDto): Promise<Tag> {
     const tag = this.repo.create(body);
-    const existingTag = await this.findOneByName(tag.name);
+    const existingTag = await this.repo.findOne({ name: tag.name });
 
     if (existingTag) {
       throw new ConflictException('Tag already exist');
@@ -36,18 +36,11 @@ export class TagsService {
     if (!id) {
       return null;
     }
-    return this.repo.findOne({ id });
-  }
-
-  findOneByName(name: string) {
-    if (!name) {
-      return null;
-    }
-    return this.repo.findOne({ name });
+    return this.repo.findOne(id);
   }
 
   async remove(id: number) {
-    const tag = await this.findOneById(id);
+    const tag = await this.repo.findOne(id);
     await this.repo.remove(tag);
   }
 }
