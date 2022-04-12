@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Tag } from './tag.entity';
@@ -9,15 +9,18 @@ import {
   IPaginationOptions,
 } from 'nestjs-typeorm-paginate';
 
-type SearchOptions = {
-  word?: string;
-} & IPaginationOptions;
+type SearchOptions = {} & IPaginationOptions;
 
 @Injectable()
 export class TagsService {
   constructor(@InjectRepository(Tag) private repo: Repository<Tag>) {}
   async create(body: CreateTagDto): Promise<Tag> {
     const tag = this.repo.create(body);
+    const existingTag = await this.findOneByName(tag.name);
+
+    if (existingTag) {
+      throw new ConflictException('Tag already exist');
+    }
 
     return await this.repo.save(tag);
   }
@@ -29,18 +32,22 @@ export class TagsService {
     return paginate<Tag>(queryBuilder, options);
   }
 
-  findOne(id: number) {
+  findOneById(id: number) {
     if (!id) {
       return null;
     }
     return this.repo.findOne({ id });
   }
 
-  async remove(id: number) {
-    const tag = await this.findOne(id);
-    if (!tag) {
+  findOneByName(name: string) {
+    if (!name) {
       return null;
     }
-    this.repo.remove(tag);
+    return this.repo.findOne({ name });
+  }
+
+  async remove(id: number) {
+    const tag = await this.findOneById(id);
+    await this.repo.remove(tag);
   }
 }

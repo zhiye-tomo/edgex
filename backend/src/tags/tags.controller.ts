@@ -17,16 +17,16 @@ import { Pagination } from 'nestjs-typeorm-paginate';
 import { CreateTagDto } from './dto/create-tag.dto';
 import { Response } from 'express';
 import { TagsService } from './tags.service';
-import { NotFoundError } from 'rxjs';
 
 @Controller('tags')
 export class TagsController {
-  constructor(private tagService: TagsService) {}
+  constructor(private tagsService: TagsService) {}
   @Post()
   async createTag(@Res() res: Response, @Body() body: CreateTagDto) {
-    const { id, name } = await this.tagService.create(body);
-
-    res.status(HttpStatus.CREATED).json({ tag: { id: id, name: name } });
+    const { id, name } = await this.tagsService.create(body);
+    res
+      .status(HttpStatus.CREATED)
+      .json({ id: id, name: name, status: 'executed' });
   }
 
   @Get()
@@ -35,9 +35,8 @@ export class TagsController {
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
   ): Promise<Pagination<Tag>> {
     limit = limit > 50 ? 50 : limit;
-    console.log('foo');
 
-    return this.tagService.search({
+    return this.tagsService.search({
       page,
       limit,
     });
@@ -46,16 +45,14 @@ export class TagsController {
   @Delete('/:id')
   async removeTag(@Res() res: Response, @Param('id') id: string) {
     if (id) {
-      const result = await this.tagService.remove(parseInt(id));
-
-      if (result === 'NotFoundException') {
-        console.log('dog');
-        throw NotFoundException;
+      const tag = await this.tagsService.findOneById(parseInt(id));
+      if (!tag) {
+        throw new NotFoundException('Tag does not exist');
       }
-      console.log('cat');
-      return res.status(204).json(null);
+      await this.tagsService.remove(parseInt(id));
+
+      return res.status(204).send();
     }
-    console.log('cat2');
     res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
       error: 'Something went wrong',
     });
