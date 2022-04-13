@@ -7,8 +7,6 @@ import {
   Get,
   Delete,
   Param,
-  DefaultValuePipe,
-  ParseIntPipe,
   Query,
   NotFoundException,
 } from '@nestjs/common';
@@ -17,7 +15,8 @@ import { Pagination } from 'nestjs-typeorm-paginate';
 import { CreateTagDto } from './dto/create-tag.dto';
 import { Response } from 'express';
 import { TagsService } from './tags.service';
-import { DeleteTagDto } from './dto/delete-tag.dto';
+import { DeleteTagDto } from './dto/query.dto';
+import { GetTagsDto } from './dto/query.dto';
 
 @Controller('tags')
 export class TagsController {
@@ -31,10 +30,9 @@ export class TagsController {
   }
 
   @Get()
-  async getTags(
-    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
-    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
-  ): Promise<Pagination<Tag>> {
+  async getTags(@Query() dto: GetTagsDto): Promise<Pagination<Tag>> {
+    let { page = 1, limit = 1 } = dto;
+
     limit = limit > 50 ? 50 : limit;
 
     return this.tagsService.search({
