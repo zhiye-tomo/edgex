@@ -18,11 +18,9 @@ export class UsersController {
       const registerdUser = await this.uesrsService.findOne(body.email);
       if (registerdUser) {
         const jwt = await this.uesrsService.generateJWT(registerdUser);
-        res.status(HttpStatus.OK).json({
-          error: {
-            code: 'email_already_exists',
-            message: 'Email already exists',
-          },
+        res.status(HttpStatus.CONFLICT).json({
+          code: 'internal_server_error',
+          message: 'Email already exists',
           jwt,
         });
         return;

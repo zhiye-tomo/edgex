@@ -24,9 +24,7 @@ export class TagsController {
   @Post()
   async createTag(@Res() res: Response, @Body() body: CreateTagDto) {
     const { id, name } = await this.tagsService.create(body);
-    res
-      .status(HttpStatus.CREATED)
-      .json({ id: id, name: name, status: 'executed' });
+    return res.status(HttpStatus.CREATED).json({ id: id, name: name });
   }
 
   @Get()
@@ -49,6 +47,6 @@ export class TagsController {
     }
     await this.tagsService.remove(parseInt(dto.id));
 
-    return res.status(204).send();
+    return res.status(200).json({ message: 'Deleted successfully' });
   }
 }
