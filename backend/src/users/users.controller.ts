@@ -19,6 +19,7 @@ export class UsersController {
       if (registerdUser) {
         const jwt = await this.uesrsService.generateJWT(registerdUser);
         res.status(HttpStatus.OK).json({
+          code: 'OK',
           message: 'Successfully logged in',
           jwt,
         });
