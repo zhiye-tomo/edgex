@@ -20,7 +20,7 @@ export class TagsService {
     const existingTag = await this.repo.findOne({ name: tag.name });
 
     if (existingTag) {
-      throw new ConflictException('Tag already exist');
+      throw new ConflictException(['Tag already exist']);
     }
 
     return await this.repo.save(tag);

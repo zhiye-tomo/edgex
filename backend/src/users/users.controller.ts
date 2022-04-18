@@ -19,21 +19,24 @@ export class UsersController {
       if (registerdUser) {
         const jwt = await this.uesrsService.generateJWT(registerdUser);
         res.status(HttpStatus.OK).json({
-          code: 'OK',
-          message: 'Successfully logged in',
+          statusCode: 200,
+          message: ['Successfully logged in'],
           jwt,
         });
         return;
       }
       const user = await this.uesrsService.create(body);
       const jwt = this.uesrsService.generateJWT(user);
-      res.status(HttpStatus.CREATED).json({ success: true, jwt });
+      res.status(HttpStatus.CREATED).json({
+        statusCode: 201,
+        message: ['User is registered'],
+        jwt,
+      });
     } catch (error) {
       res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-        error: {
-          code: 'internal_server_error',
-          message: 'Internal server error',
-        },
+        statusCode: 500,
+        message: ['Internal server error'],
+        error: 'Internal Server Error',
       });
     }
   }

@@ -22,7 +22,12 @@ export class TagsController {
   @Post()
   async createTag(@Res() res: Response, @Body() body: CreateTagDto) {
     const { id, name } = await this.tagsService.create(body);
-    return res.status(HttpStatus.CREATED).json({ id, name });
+    return res.status(HttpStatus.CREATED).json({
+      statusCode: 201,
+      message: [`tag is created with id: ${id}`],
+      id,
+      name,
+    });
   }
 
   @Get()
@@ -43,10 +48,13 @@ export class TagsController {
   async removeTag(@Res() res: Response, @Param() dto: DeleteTagDto) {
     const tag = await this.tagsService.findOneById(parseInt(dto.id));
     if (!tag) {
-      throw new NotFoundException('Tag does not exist');
+      throw new NotFoundException(['Tag does not exist']);
     }
     await this.tagsService.remove(parseInt(dto.id));
 
-    return res.status(HttpStatus.OK).json({ message: 'Deleted successfully' });
+    return res.status(HttpStatus.OK).json({
+      statusCode: 200,
+      message: ['Deleted successfully'],
+    });
   }
 }
