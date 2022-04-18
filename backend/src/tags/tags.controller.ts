@@ -10,8 +10,6 @@ import {
   Query,
   NotFoundException,
 } from '@nestjs/common';
-import { Tag } from './tag.entity';
-import { Pagination } from 'nestjs-typeorm-paginate';
 import { CreateTagDto } from './dto/create-tag.dto';
 import { Response } from 'express';
 import { TagsService } from './tags.service';
@@ -24,19 +22,21 @@ export class TagsController {
   @Post()
   async createTag(@Res() res: Response, @Body() body: CreateTagDto) {
     const { id, name } = await this.tagsService.create(body);
-    return res.status(HttpStatus.CREATED).json({ id: id, name: name });
+    return res.status(HttpStatus.CREATED).json({ id, name });
   }
 
   @Get()
-  async getTags(@Query() dto: GetTagsDto): Promise<Pagination<Tag>> {
+  async getTags(@Res() res: Response, @Query() dto: GetTagsDto) {
     let { page = 1, limit = 1 } = dto;
 
     limit = limit > 50 ? 50 : limit;
 
-    return this.tagsService.search({
+    const tags = await this.tagsService.search({
       page,
       limit,
     });
+
+    return res.status(HttpStatus.OK).json(tags);
   }
 
   @Delete('/:id')
@@ -47,6 +47,6 @@ export class TagsController {
     }
     await this.tagsService.remove(parseInt(dto.id));
 
-    return res.status(200).json({ message: 'Deleted successfully' });
+    return res.status(HttpStatus.OK).json({ message: 'Deleted successfully' });
   }
 }
