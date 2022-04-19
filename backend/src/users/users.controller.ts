@@ -19,8 +19,7 @@ export class UsersController {
       if (registerdUser) {
         const jwt = await this.uesrsService.generateJWT(registerdUser);
         res.status(HttpStatus.OK).json({
-          statusCode: 200,
-          message: ['Successfully logged in'],
+          message: 'Successfully logged in',
           jwt,
         });
         return;
@@ -28,8 +27,7 @@ export class UsersController {
       const user = await this.uesrsService.create(body);
       const jwt = this.uesrsService.generateJWT(user);
       res.status(HttpStatus.CREATED).json({
-        statusCode: 201,
-        message: ['User is registered'],
+        message: 'User is registered',
         jwt,
       });
     } catch (error) {

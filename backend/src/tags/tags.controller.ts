@@ -23,8 +23,6 @@ export class TagsController {
   async createTag(@Res() res: Response, @Body() body: CreateTagDto) {
     const { id, name } = await this.tagsService.create(body);
     return res.status(HttpStatus.CREATED).json({
-      statusCode: 201,
-      message: [`tag is created with id: ${id}`],
       id,
       name,
     });
@@ -53,8 +51,7 @@ export class TagsController {
     await this.tagsService.remove(parseInt(dto.id));
 
     return res.status(HttpStatus.OK).json({
-      statusCode: 200,
-      message: ['Deleted successfully'],
+      message: 'Deleted successfully',
     });
   }
 }
