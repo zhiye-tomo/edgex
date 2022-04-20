@@ -50,6 +50,6 @@ export class TagsController {
     }
     await this.tagsService.remove(parseInt(dto.id));
 
-    return res.status(HttpStatus.NO_CONTENT).json(null);
+    return res.status(HttpStatus.NO_CONTENT).send();
   }
 }

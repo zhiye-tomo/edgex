@@ -19,7 +19,6 @@ export class UsersController {
       if (registerdUser) {
         const jwt = await this.uesrsService.generateJWT(registerdUser);
         res.status(HttpStatus.OK).json({
-          success: true,
           jwt,
         });
         return;
@@ -27,7 +26,6 @@ export class UsersController {
       const user = await this.uesrsService.create(body);
       const jwt = this.uesrsService.generateJWT(user);
       res.status(HttpStatus.CREATED).json({
-        success: true,
         jwt,
       });
     } catch (error) {
