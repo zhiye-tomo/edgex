@@ -19,23 +19,20 @@ export class UsersController {
       if (registerdUser) {
         const jwt = await this.uesrsService.generateJWT(registerdUser);
         res.status(HttpStatus.OK).json({
-          error: {
-            code: 'email_already_exists',
-            message: 'Email already exists',
-          },
           jwt,
         });
         return;
       }
       const user = await this.uesrsService.create(body);
       const jwt = this.uesrsService.generateJWT(user);
-      res.status(HttpStatus.CREATED).json({ success: true, jwt });
+      res.status(HttpStatus.CREATED).json({
+        jwt,
+      });
     } catch (error) {
       res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-        error: {
-          code: 'internal_server_error',
-          message: 'Internal server error',
-        },
+        statusCode: 500,
+        message: ['Internal server error'],
+        error: 'Internal Server Error',
       });
     }
   }
