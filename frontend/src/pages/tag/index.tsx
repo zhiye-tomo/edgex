@@ -10,21 +10,47 @@ import { host } from "../../constants";
 import { config } from "utils/config";
 import { useAuthDispatch } from "context/auth";
 import { Tag } from "types";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
+import { Pagination } from "components/Pagination";
+import { usePaginationStates } from "hooks/usePaginationStates";
 
 const TagPage: NextPage = () => {
   const [tags, setTags] = useState<Tag[]>([]);
+  const [page, setPage] = useState(1);
+  const [totalPageNum, setTotalPageNum] = useState(0);
+  const [limit] = useState(5);
   const { jwt } = useAuthDispatch();
+  const isFirstRender = useRef(true);
 
-  const getTags = async () => {
+  async function getTags(): Promise<void> {
     const res = await axios.get(`${host}/tags`, {
       ...config(jwt ?? ""),
-      params: { page: 1, limit: 3 },
+      params: { page, limit },
     });
     setTags(res.data.items);
-    console.log("res", res.data.items);
+  }
+
+  const getTotalPageNum = async () => {
+    const res = await axios.get(`${host}/tags`, {
+      ...config(jwt ?? ""),
+      params: { page, limit },
+    });
+    setTotalPageNum(res.data.meta.totalPages);
   };
 
+  useEffect(() => {
+    getTotalPageNum();
+  }, [tags]);
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    console.log(isFirstRender.current);
+
+    getTags();
+  }, [page]);
   const createTag: (name: string) => Promise<void> = async (name) => {
     await axios.post(`${host}/tags`, { name }, config(jwt ?? ""));
     getTags();
@@ -48,6 +74,7 @@ const TagPage: NextPage = () => {
       <main className={styles.main}>
         <CreateTagForm createTag={createTag} />
         <TagList getTags={getTags} tags={tags} deleteTag={deleteTag} />
+        <Pagination page={page} setPage={setPage} totalPageNum={totalPageNum} />
       </main>
     </div>
   );
