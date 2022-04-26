@@ -12,7 +12,7 @@ import { useAuthDispatch } from "context/auth";
 import { Tag } from "types";
 import { useState, useRef, useEffect } from "react";
 import { Pagination } from "components/Pagination";
-import { usePaginationStates } from "hooks/usePaginationStates";
+// import { usePaginationStates } from "hooks/usePaginationStates";
 
 const TagPage: NextPage = () => {
   const [tags, setTags] = useState<Tag[]>([]);
@@ -47,7 +47,6 @@ const TagPage: NextPage = () => {
       isFirstRender.current = false;
       return;
     }
-    console.log(isFirstRender.current);
 
     getTags();
   }, [page]);

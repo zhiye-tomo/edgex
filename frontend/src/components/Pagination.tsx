@@ -32,7 +32,7 @@ export const Pagination: React.FC<Props> = ({
       <a href="#" onClick={handleBack}>
         &laquo;
       </a>
-      {[Array(totalPageNum)].map((item, i) => (
+      {[...Array(totalPageNum)].map((item, i) => (
         <span>
           <a key={i} onClick={() => getPage(i + 1)}>
             {i + 1}
