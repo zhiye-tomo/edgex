@@ -1,5 +1,4 @@
 import { useMemo } from "react";
-
 export const DOTS = "...";
 
 interface Props {
@@ -22,7 +21,6 @@ export const usePagination = ({
 }: Props) => {
   const paginationRange = useMemo(() => {
     const totalPageCount = Math.ceil(totalCount / pageSize);
-
     const totalPageNumbers = siblingCount + 5;
 
     if (totalPageNumbers >= totalPageCount) {

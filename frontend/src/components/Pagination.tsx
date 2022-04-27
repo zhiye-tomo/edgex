@@ -1,48 +1,78 @@
+import React from "react";
+import styles from "../../src/styles/components/Pagination.module.scss";
+import { usePagination, DOTS } from "../hooks/usePagination";
+
 interface Props {
-  page: number;
-  totalPageNum: number;
-  setPage: React.Dispatch<React.SetStateAction<number>>;
+  onPageChange: (arg0: number) => void;
+  totalCount: number;
+  siblingCount: number;
+  currentPage: number;
+  pageSize: number;
 }
-
 export const Pagination: React.FC<Props> = ({
-  page,
-  setPage,
-  totalPageNum,
+  onPageChange,
+  totalCount,
+  siblingCount,
+  currentPage,
+  pageSize,
 }: Props) => {
-  const getPage = (i: number) => {
-    setPage(i);
-  };
+  const paginationRange = usePagination({
+    currentPage,
+    totalCount,
+    siblingCount,
+    pageSize,
+  });
 
-  const handleBack = () => {
-    if (page === 1) {
+  if (paginationRange) {
+    if (currentPage === 0 || paginationRange.length < 2) {
+      return null;
+    }
+  }
+  const onNext = () => {
+    if (currentPage === Math.ceil(totalCount / pageSize)) {
       return;
     }
-    setPage((currentPage) => currentPage - 1);
+    onPageChange(currentPage + 1);
   };
 
-  const handleForward = () => {
-    if (page === totalPageNum) {
+  const onPrevious = () => {
+    if (currentPage === 1) {
       return;
     }
-    setPage((currentPage) => currentPage + 1);
+    onPageChange(currentPage - 1);
   };
 
+  let lastPage = paginationRange && paginationRange[paginationRange.length - 1];
   return (
-    <div>
-      <a href="#" onClick={handleBack}>
+    <ul className={styles.paginationBar}>
+      <li className={styles.paginationItem} onClick={onPrevious}>
         &laquo;
-      </a>
-      {[...Array(totalPageNum)].map((item, i) => (
-        <span>
-          <a key={i} onClick={() => getPage(i + 1)}>
-            {i + 1}
-          </a>
-          <span>-</span>
-        </span>
-      ))}
-      <a href="#" onClick={handleForward}>
+      </li>
+      {paginationRange?.map((pageNumber) => {
+        if (pageNumber === DOTS) {
+          return <li className="pagination-item dots">&#8230;</li>;
+        }
+
+        return (
+          <li
+            className={
+              pageNumber === currentPage
+                ? `${styles.paginationItem} ${styles.selected}`
+                : styles.paginationItem
+            }
+            onClick={
+              typeof pageNumber === "number"
+                ? () => onPageChange(pageNumber)
+                : undefined
+            }
+          >
+            {pageNumber}
+          </li>
+        );
+      })}
+      <li className={styles.paginationItem} onClick={onNext}>
         &raquo;
-      </a>
-    </div>
+      </li>
+    </ul>
   );
 };

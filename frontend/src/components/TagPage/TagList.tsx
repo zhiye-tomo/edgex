@@ -13,8 +13,6 @@ export const TagList: React.FC<Props> = ({
   deleteTag,
 }: Props) => {
   useEffect(() => {
-    console.log("tags", tags);
-
     if (!tags.length) {
       getTags();
     }
