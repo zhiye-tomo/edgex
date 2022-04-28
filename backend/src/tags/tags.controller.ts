@@ -13,8 +13,7 @@ import {
 import { CreateTagDto } from './dto/create-tag.dto';
 import { Response } from 'express';
 import { TagsService } from './tags.service';
-import { DeleteTagDto } from './dto/query.dto';
-import { GetTagsDto } from './dto/query.dto';
+import { DeleteTagDto, GetTagsDto } from './dto/query.dto';
 
 @Controller('tags')
 export class TagsController {
