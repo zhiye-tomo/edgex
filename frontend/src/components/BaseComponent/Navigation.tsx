@@ -1,4 +1,5 @@
 import styles from "../../styles/components/Navigation.module.scss";
+import Link from "next/link";
 
 type Nav = {
   name: string;
@@ -7,10 +8,11 @@ type Nav = {
 
 export const Navigation: React.FC = () => {
   const navs: Array<Nav> = [
-    { name: "Top", link: "xxx" },
+    { name: "Top", link: "/" },
     { name: "Search", link: "xxx" },
-    { name: "New", link: "xxx" },
-    { name: "XXX", link: "xxx" },
+    { name: "Article", link: "xxx" },
+    { name: "Group", link: "" },
+    { name: "Tag", link: "/tag" },
     { name: "Me", link: "xxx" },
   ];
   return (
@@ -19,7 +21,9 @@ export const Navigation: React.FC = () => {
         {navs.map((nav: Nav, key: number) => {
           return (
             <li className={styles.li} key={key}>
-              <a className={styles.link}>{nav.name}</a>
+              <Link href={nav.link}>
+                <a className={styles.link}>{nav.name}</a>
+              </Link>
             </li>
           );
         })}
