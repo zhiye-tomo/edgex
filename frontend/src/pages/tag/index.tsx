@@ -16,7 +16,7 @@ import { Pagination } from "components/Pagination";
 let PageSize = 2;
 
 const TagPage: NextPage = () => {
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const [tags, setTags] = useState<Tag[]>([]);
   const [lengthOfData, setLengthOfData] = useState<number>(0);
   const { jwt } = useAuthDispatch();
@@ -39,9 +39,10 @@ const TagPage: NextPage = () => {
 
     getTags();
   }, [currentPage]);
+
   const createTag: (name: string) => Promise<void> = async (name) => {
-    await axios.post(`${host}/tags`, { name }, config(jwt ?? ""));
-    getTags();
+    const res = await axios.post(`${host}/tags`, { name }, config(jwt ?? ""));
+    setTags((prev) => [...prev, res.data]);
   };
 
   const deleteTag: (id: number) => Promise<void> = async (id) => {
