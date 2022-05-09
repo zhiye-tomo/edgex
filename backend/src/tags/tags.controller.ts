@@ -21,10 +21,9 @@ export class TagsController {
   constructor(private tagsService: TagsService) {}
   @Post()
   async createTag(@Res() res: Response, @Body() body: CreateTagDto) {
-    const { id, name } = await this.tagsService.create(body);
+    const tag = await this.tagsService.create(body);
     return res.status(HttpStatus.CREATED).json({
-      id,
-      name,
+      ...tag,
     });
   }
 

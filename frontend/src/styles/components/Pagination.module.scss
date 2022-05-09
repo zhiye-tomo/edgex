@@ -1,0 +1,22 @@
+.paginationBar {
+  display: flex;
+  flex-direction: row;
+  list-style: none;
+}
+.paginationItem {
+  padding: 0 12px;
+  height: 32px;
+  text-align: center;
+  align-items: center;
+  margin: 0 4px;
+  display: flex;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+    cursor: pointer;
+  }
+
+  &.selected {
+    background-color: rgba(0, 0, 0, 0.08);
+  }
+}
