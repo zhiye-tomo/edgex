@@ -2,6 +2,7 @@ import { Footer } from "components/BaseComponent/Footer";
 import { Navigation } from "components/BaseComponent/Navigation";
 import { Meta } from "components/Meta";
 import { NextPage } from "next";
+import { useRouter } from "next/router";
 import styles from "../../styles/layouts/tag.module.scss";
 import { CreateTagForm } from "components/TagPage/CreateTagForm";
 import { TagList } from "components/TagPage/TagList";
@@ -21,6 +22,7 @@ const TagPage: NextPage = () => {
   const [lengthOfData, setLengthOfData] = useState<number>(0);
   const { jwt } = useAuthDispatch();
   const isFirstRender = useRef(true);
+  const router = useRouter();
 
   const getTags = async (): Promise<void> => {
     const res = await axios.get(`${host}/tags`, {
@@ -28,6 +30,9 @@ const TagPage: NextPage = () => {
       params: { page: currentPage, limit: PageSize },
     });
     setTags(res.data.items);
+    if (res.status !== 200) {
+      router.push("/login");
+    }
     setLengthOfData(res.data.meta.totalItems);
   };
 
@@ -42,11 +47,17 @@ const TagPage: NextPage = () => {
 
   const createTag: (name: string) => Promise<void> = async (name) => {
     const res = await axios.post(`${host}/tags`, { name }, config(jwt ?? ""));
+    if (res.status !== 201) {
+      router.push("/login");
+    }
     setTags((prev) => [...prev, res.data]);
   };
 
   const deleteTag: (id: number) => Promise<void> = async (id) => {
-    await axios.delete(`${host}/tags/${id}`, config(jwt ?? ""));
+    const res = await axios.delete(`${host}/tags/${id}`, config(jwt ?? ""));
+    if (res.status !== 204) {
+      router.push("/login");
+    }
     getTags();
   };
 
